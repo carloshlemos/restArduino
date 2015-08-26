@@ -1,9 +1,5 @@
-restArduino: Web service Restful with communication between the Arduino board
+restArduino: Web service Restful with communication between the Arduino board.
 ==============================================================
-Author: Carlos Henrique Lemos
-Level: Intermediate  
-Technologies:  
-
 What is it?
 -----------
 Used for communication between the Arduino board and a computer or other device.
