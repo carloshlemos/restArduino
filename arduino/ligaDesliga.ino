@@ -16,6 +16,24 @@ void loop(){
         case 2:
            digitalWrite(ledPin,LOW); //desliga o pino ledPin
          break;
+        case 3:
+           digitalWrite(ledPin,HIGH); //liga o pino ledPin
+        break;
+        case 4:
+           digitalWrite(ledPin,LOW); //liga o pino ledPin
+        break;
+        case 5:
+           digitalWrite(ledPin,HIGH); //liga o pino ledPin
+        break;
+        case 6:
+           digitalWrite(ledPin,LOW); //liga o pino ledPin
+        break;
+        case 7:
+           digitalWrite(ledPin,HIGH); //liga o pino ledPin
+        break;
+        case 8:
+           digitalWrite(ledPin,LOW); //liga o pino ledPin
+        break;
     }
   }
 }
