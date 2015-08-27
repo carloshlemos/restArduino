@@ -27,7 +27,7 @@ public class ArduinoRestController {
         arduino = new ControlePorta("/dev/ttyUSB0", 9600); //Linux - porta e taxa de transmissão        
     }
 
-    @RequestMapping(value = "/enviarComando", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "enviarComando/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     private ResponseEntity<ComandoDTO> enviarComando(@RequestBody ComandoDTO comando) {
         // TODO: adicionar a validação do ambiente e utensílio
