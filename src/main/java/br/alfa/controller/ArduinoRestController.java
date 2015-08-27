@@ -30,8 +30,12 @@ public class ArduinoRestController {
     @RequestMapping(value = "enviarComando/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     private ResponseEntity<ComandoDTO> enviarComando(@RequestBody ComandoDTO comando) {
-        // TODO: adicionar a validação do ambiente e utensílio
-        arduino.enviaDados(comando.getComando());
+        try {
+            arduino.enviaDados(comando.getComando());
+        } catch (Exception e) {
+            return new ResponseEntity<ComandoDTO>(comando, HttpStatus.EXPECTATION_FAILED);
+        }
+        
         // TODO: adicionar a parte de persistência para auditoria e geração de perfil
         return new ResponseEntity<ComandoDTO>(comando, HttpStatus.OK);
     }
