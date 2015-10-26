@@ -38,6 +38,8 @@ public class ArduinoRestController {
     @ResponseStatus(HttpStatus.OK)
     private @ResponseBody
     String enviarComando(@RequestParam(value = "comando") Integer comando) {
+        
+        System.out.println(arduino.recebeValor());
         arduino.enviaDados(comando);
 
         return "Comando execudado!";
