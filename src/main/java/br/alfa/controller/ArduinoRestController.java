@@ -31,15 +31,13 @@ public class ArduinoRestController {
 
     @PostConstruct
     private void initArduino() {
-        arduino = new ControlePorta("/dev/ttyUSB0", 9600); //Linux - porta e taxa de transmissão        
+        arduino = new ControlePorta("/dev/ttyUSB1", 9600); //Linux - porta e taxa de transmissão        
     }
 
     @RequestMapping(value = "/enviarComando", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     private @ResponseBody
     String enviarComando(@RequestParam(value = "comando") Integer comando) {
-        
-        System.out.println(arduino.recebeValor());
         arduino.enviaDados(comando);
 
         return "Comando execudado!";

@@ -7,23 +7,14 @@ package br.alfa.arduino;
 import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
 import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class ControlePorta implements SerialPortEventListener {
+public class ControlePorta {
 
-    private SerialPort port;
     private OutputStream serialOut;
-    private BufferedReader input;
     private int taxa;
     private String portaCOM;
-    private String resposta;
 
     /**
      * Construtor da classe ControlePorta
@@ -53,12 +44,8 @@ public class ControlePorta implements SerialPortEventListener {
                 npe.printStackTrace();
             }
             //Abre a porta COM 
-            port = (SerialPort) portId.open("Comunicação serial", this.taxa);
-            input = new BufferedReader(new InputStreamReader(port.getInputStream()));
+            SerialPort port = (SerialPort) portId.open("Comunicação serial", this.taxa);
             serialOut = port.getOutputStream();
-
-            port.addEventListener(this);
-            port.notifyOnDataAvailable(true);
             port.setSerialPortParams(this.taxa, //taxa de transferência da porta serial 
                     SerialPort.DATABITS_8, //taxa de 10 bits 8 (envio)
                     SerialPort.STOPBITS_1, //taxa de 10 bits 1 (recebimento)
@@ -71,10 +58,11 @@ public class ControlePorta implements SerialPortEventListener {
     /**
      * Método que fecha a comunicação com a porta serial
      */
-    public synchronized void close() {
-        if (port != null) {
-            port.removeEventListener();
-            port.close();
+    public void close() {
+        try {
+            serialOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -88,34 +76,4 @@ public class ControlePorta implements SerialPortEventListener {
             ex.printStackTrace();
         }
     }
-    
-    public String recebeValor(){
-        String valor = null;
-        try {
-            valor = input.readLine();
-        } catch (IOException ex) {
-            Logger.getLogger(ControlePorta.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return valor;
-    }
-
-    /**
-     * Handle an event on the serial port. Read the data and print it.
-     */
-    @Override
-    public void serialEvent(SerialPortEvent oEvent) {
-        if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
-            try {
-                this.resposta = input.readLine();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public String getResposta() {
-        return resposta;
-    }
-
 }
