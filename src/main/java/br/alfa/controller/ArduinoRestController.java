@@ -33,8 +33,15 @@ public class ArduinoRestController {
     private void initArduino() {
         arduino = new ControlePorta("/dev/ttyUSB0", 9600); //Linux - porta e taxa de transmissão        
     }
+    
+    @RequestMapping(value="/teste", method=RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    private @ResponseBody String teste(){
+        return "Deu certo";
+    }
 
-    @RequestMapping(value = "/enviarComando", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/enviarComando", method = RequestMethod.POST, 
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     private @ResponseBody
     String enviarComando(@RequestParam(value = "comando") Integer comando) {
@@ -43,7 +50,8 @@ public class ArduinoRestController {
         return "Comando execudado!";
     }
 
-    @RequestMapping(value = "enviarComandoVoz/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "enviarComandoVoz/", method = RequestMethod.POST, 
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     private ResponseEntity<ComandoDTO> enviarComandoVoz(@RequestBody ComandoDTO comando) {
         try {
