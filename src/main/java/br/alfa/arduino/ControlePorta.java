@@ -7,12 +7,18 @@ package br.alfa.arduino;
 import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
 import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import static jdk.nashorn.tools.ShellFunctions.input;
 
-public class ControlePorta {
+public class ControlePorta implements SerialPortEventListener {
 
     private OutputStream serialOut;
+    private BufferedReader serialInput;
     private int taxa;
     private String portaCOM;
 
@@ -45,7 +51,10 @@ public class ControlePorta {
             }
             //Abre a porta COM 
             SerialPort port = (SerialPort) portId.open("Comunicação serial", this.taxa);
+            //Escrita serial
             serialOut = port.getOutputStream();
+            //Leitor serial
+            serialInput = new BufferedReader(new InputStreamReader(port.getInputStream()));
             port.setSerialPortParams(this.taxa, //taxa de transferência da porta serial 
                     SerialPort.DATABITS_8, //taxa de 10 bits 8 (envio)
                     SerialPort.STOPBITS_1, //taxa de 10 bits 1 (recebimento)
@@ -74,6 +83,22 @@ public class ControlePorta {
             serialOut.write(opcao);//escreve o valor na porta serial para ser enviado
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void serialEvent(SerialPortEvent oEvent) {
+        if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+            try {
+                String inputLine = null;
+                if (serialInput.ready()) {
+                    inputLine = serialInput.readLine();
+                    System.out.println(inputLine);
+                }
+
+            } catch (Exception e) {
+                System.err.println(e.toString());
+            }
         }
     }
 }
