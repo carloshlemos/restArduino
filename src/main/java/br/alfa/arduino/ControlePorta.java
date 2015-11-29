@@ -7,12 +7,18 @@ package br.alfa.arduino;
 import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
 import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class ControlePorta {
+public class ControlePorta implements SerialPortEventListener {
 
     private OutputStream serialOut;
+    private InputStream serialInput;
     private int taxa;
     private String portaCOM;
 
@@ -46,6 +52,7 @@ public class ControlePorta {
             //Abre a porta COM 
             SerialPort port = (SerialPort) portId.open("Comunicação serial", this.taxa);
             serialOut = port.getOutputStream();
+            serialInput = port.getInputStream();
             port.setSerialPortParams(this.taxa, //taxa de transferência da porta serial 
                     SerialPort.DATABITS_8, //taxa de 10 bits 8 (envio)
                     SerialPort.STOPBITS_1, //taxa de 10 bits 1 (recebimento)
@@ -74,6 +81,15 @@ public class ControlePorta {
             serialOut.write(opcao);//escreve o valor na porta serial para ser enviado
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void serialEvent(SerialPortEvent spe) {
+        try {
+            System.out.println("Retorno do Arduino: " + serialInput.read());
+        } catch (IOException ex) {
+            Logger.getLogger(ControlePorta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

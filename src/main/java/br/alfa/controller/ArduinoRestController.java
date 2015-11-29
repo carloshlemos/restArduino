@@ -40,7 +40,7 @@ public class ArduinoRestController {
     String enviarComando(@RequestParam(value = "comando") Integer comando) {
         arduino.enviaDados(comando);
 
-        return "Comando execudado!";
+        return "Comando executado!";
     }
 
     @RequestMapping(value = "enviarComandoVoz/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
